@@ -20,16 +20,21 @@ export async function GET() {
     winner = 'Tie';
   }
 
-  return new Response(
-    JSON.stringify({
-      playerDice: [playerDice1, playerDice2],
-      dealerDice: [dealerDice1, dealerDice2],
-      playerTotal,
-      dealerTotal,
-      winner,
-    }),
-    {
-      headers: { 'Content-Type': 'application/json' },
-    }
-  );
+  const result = {
+    playerDice: [playerDice1, playerDice2],
+    dealerDice: [dealerDice1, dealerDice2],
+    playerTotal,
+    dealerTotal,
+    winner,
+  };
+
+  await fetch('http://localhost:3000/api/patterns', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(result),
+  }).catch(() => {});
+
+  return new Response(JSON.stringify(result), {
+    headers: { 'Content-Type': 'application/json' },
+  });
 }
